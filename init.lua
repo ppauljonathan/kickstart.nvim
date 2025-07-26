@@ -925,7 +925,7 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
@@ -947,16 +947,22 @@ require('lazy').setup({
     },
   },
 
-  { 'projekt0n/github-nvim-theme' }, --  github
-  { 'ellisonleao/gruvbox.nvim'},
-  { 'shaunsingh/nord.nvim' },
   {
-    'sainnhe/everforest',
+    'projekt0n/github-nvim-theme',
+  }, --  github
+  {
+    'ellisonleao/gruvbox.nvim'
+  },
+  {
+    'shaunsingh/nord.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd('colorscheme everforest')
+      vim.cmd('colorscheme nord')
     end,
+  },
+  {
+    'sainnhe/everforest',
   },
 
   -- Highlight todo, notes, etc in comments
