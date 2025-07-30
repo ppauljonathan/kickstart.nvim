@@ -948,15 +948,24 @@ require('lazy').setup({
     },
   },
 
-  { 'projekt0n/github-nvim-theme' }, --  github
-  { 'neanias/everforest-nvim' },
-  { 'ellisonleao/gruvbox.nvim'},
+  {
+    'projekt0n/github-nvim-theme',
+  }, --  github
+  {
+    'neanias/everforest-nvim',
+  },
+  {
+    'ellisonleao/gruvbox.nvim',
+  },
   {
     'shaunsingh/nord.nvim',
+  },
+  {
+    'catppuccin/nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd('colorscheme nord')
+      vim.cmd('colorscheme catppuccin')
     end
   },
 
