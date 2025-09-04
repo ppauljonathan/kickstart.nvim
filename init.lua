@@ -478,19 +478,19 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
           vimgrep_arguments = {
-            "rg",
-            "--color=never",
-            "--no-heading",
-            "--with-filename",
-            "--line-number",
-            "--column",
-            "--smart-case",
-            "--hidden",      -- include hidden files
-            "--no-ignore",   -- include files in .gitignore
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+            '--hidden', -- include hidden files
+            '--no-ignore', -- include files in .gitignore
           },
         },
 
@@ -926,7 +926,7 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer'},
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
@@ -965,8 +965,8 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd('colorscheme catppuccin')
-    end
+      vim.cmd 'colorscheme catppuccin'
+    end,
   },
 
   -- Highlight todo, notes, etc in comments
@@ -1104,6 +1104,66 @@ require('lazy').setup({
 
   -- rainbowcsv
   { 'mechatroner/rainbow_csv' },
+
+  -- startup
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      local db = require 'dashboard'
+      local logo = {
+        '',
+        '',
+        '', -- top padding
+        [[      rjj             rr      ]],
+        [[    xrrrjj            xxxx    ]],
+        [[  nxrrrrjjjr          nxnnxx  ]],
+        [[zzzxxxrrrrrrj         nnnnnnnv]],
+        [[zzzXnxxxrrrrrr        vvvvvvvv]],
+        [[zXzXXcxxrxrxrxr       vvvvvvvv]],
+        [[XXXXXYznxxxxxxxxn     cccccccc]],
+        [[YYXYXYYXxxxnxxxnnn    cccccccc]],
+        [[YYYYYYYYxnnnnnnnnnn   zzzzzzzz]],
+        [[YJYJYJYY  nnnnnnnnnn  zzzzzzzz]],
+        [[JJJJJJJJ   vvvvvvvvvvvXXXXXXXX]],
+        [[JCJCJCJJ    vvvvvvvvvvzXXXXXXX]],
+        [[CCCCCCCC     zcccvcccvczYYYYYY]],
+        [[CCCCCCCC       cccccccczzYYYYY]],
+        [[QQQQQQQQ        cccccczzzzYJJJ]],
+        [[QQQQQQQQ         zzzzzzXzzXYJJ]],
+        [[  000000          XzzzXXXXXY  ]],
+        [[    0000            zXXXYY    ]],
+        [[      OO             XYJ      ]],
+        '',
+      }
+
+      db.setup {
+        theme = 'doom',
+        config = {
+          header = logo,
+
+          center = {
+            { icon = '  ', desc = 'Find File', key = '<leader>ff', action = 'Telescope find_files' },
+            { icon = '󱎸  ', desc = 'Live Grep', key = '<leader>fg', action = 'Telescope live_grep' },
+            { icon = '  ', desc = 'Recent Files', key = '<leader>s.', action = 'Telescope oldfiles' },
+            { icon = '󰙅  ', desc = 'File Sidebar', key = '<C-b>', action = 'Neotree toggle right reveal' },
+            { icon = '󰗼  ', desc = 'Quit', key = ':q', action = 'quit' },
+          },
+
+          footer = function()
+            local stats = require('lazy').stats()
+            local plugins = stats.count
+            local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+            return {
+              '📂 ' .. vim.fn.getcwd(),
+              '⚡ Loaded ' .. plugins .. ' plugins in ' .. ms .. 'ms',
+            }
+          end,
+        },
+      }
+    end,
+  },
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
