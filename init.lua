@@ -1146,8 +1146,8 @@ require('lazy').setup({
           center = {
             { icon = '  ', desc = 'Find File', key = '<leader>ff', action = 'Telescope find_files' },
             { icon = '󱎸  ', desc = 'Live Grep', key = '<leader>fg', action = 'Telescope live_grep' },
-            { icon = '  ', desc = 'Recent Files', key = '<leader>s.', action = 'Telescope oldfiles' },
             { icon = '󰙅  ', desc = 'File Sidebar', key = '<C-b>', action = 'Neotree toggle right reveal' },
+            { icon = '  ', desc = 'Config', key = '<C-,>', action = 'edit ~/.config/nvim/init.lua' },
             { icon = '󰗼  ', desc = 'Quit', key = ':q', action = 'quit' },
           },
 
