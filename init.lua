@@ -1105,7 +1105,63 @@ require('lazy').setup({
 
   -- rainbowcsv
   { 'mechatroner/rainbow_csv' },
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      local db = require 'dashboard'
+      local logo = {
+        '',
+        '',
+        '', -- top padding
+        [[      rjj             rr      ]],
+        [[    xrrrjj            xxxx    ]],
+        [[  nxrrrrjjjr          nxnnxx  ]],
+        [[zzzxxxrrrrrrj         nnnnnnnv]],
+        [[zzzXnxxxrrrrrr        vvvvvvvv]],
+        [[zXzXXcxxrxrxrxr       vvvvvvvv]],
+        [[XXXXXYznxxxxxxxxn     cccccccc]],
+        [[YYXYXYYXxxxnxxxnnn    cccccccc]],
+        [[YYYYYYYYxnnnnnnnnnn   zzzzzzzz]],
+        [[YJYJYJYY  nnnnnnnnnn  zzzzzzzz]],
+        [[JJJJJJJJ   vvvvvvvvvvvXXXXXXXX]],
+        [[JCJCJCJJ    vvvvvvvvvvzXXXXXXX]],
+        [[CCCCCCCC     zcccvcccvczYYYYYY]],
+        [[CCCCCCCC       cccccccczzYYYYY]],
+        [[QQQQQQQQ        cccccczzzzYJJJ]],
+        [[QQQQQQQQ         zzzzzzXzzXYJJ]],
+        [[  000000          XzzzXXXXXY  ]],
+        [[    0000            zXXXYY    ]],
+        [[      OO             XYJ      ]],
+        '',
+      }
 
+      db.setup {
+        theme = 'doom',
+        config = {
+          header = logo,
+
+          center = {
+            { icon = '  ', desc = 'Find File', key = '<leader>ff', action = 'Telescope find_files' },
+            { icon = '󱎸  ', desc = 'Live Grep', key = '<leader>fg', action = 'Telescope live_grep' },
+            { icon = '󰙅  ', desc = 'File Sidebar', key = '<C-b>', action = 'Neotree toggle right reveal' },
+            { icon = '󰗼  ', desc = 'Quit', key = ':q', action = 'quit' },
+          },
+
+          footer = function()
+            local stats = require('lazy').stats()
+            local plugins = stats.count
+            local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+            return {
+              '📂 ' .. vim.fn.getcwd(),
+              '⚡ Loaded ' .. plugins .. ' plugins in ' .. ms .. 'ms',
+            }
+          end,
+        },
+      }
+    end,
+  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
