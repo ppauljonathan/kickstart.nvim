@@ -227,7 +227,7 @@ vim.keymap.set('n', '<leader>bs', ':w<CR>', { noremap = true, silent = true }) -
 vim.keymap.set('n', '<leader>bk', ':bd<CR>', { noremap = true, silent = true }) -- Close buffer
 
 -- Tabs
-vim.keymap.set('n', '<leader><Tab>', ':bnext<CR>', { noremap = true, silent = true })
+-- vim.keymap.set('n', '<leader><Tab>', ':bnext<CR>', { noremap = true, silent = true })
 
 -- Splits
 vim.keymap.set('n', '<leader>ws', ':split<CR>', { desc = 'Horizontal Split' })
@@ -968,6 +968,9 @@ require('lazy').setup({
       vim.cmd 'colorscheme catppuccin'
     end,
   },
+  {
+    'EdenEast/nightfox.nvim',
+  },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -1005,11 +1008,36 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      -- Define highlight groups (once in your config/init)
+      vim.api.nvim_set_hl(0, 'StatusLineSaved', { fg = '#00ff00' }) -- green
+      vim.api.nvim_set_hl(0, 'StatusLineModified', { fg = '#ffff00' }) -- yellow
+      vim.api.nvim_set_hl(0, 'StatusLineRO', { fg = '#ff0000' }) -- red
+
       -- Override the section_filename to show only the project directory
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
-        local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-        return cwd
+        -- Project root
+        local root = vim.fn.getcwd()
+        local project = vim.fn.fnamemodify(root, ':t')
+
+        -- File path relative to root
+        local filepath = vim.fn.expand '%:p'
+        local relative = vim.fn.fnamemodify(filepath, ':.' .. root)
+        if relative == '' then
+          relative = '[No Name]'
+        end
+
+        -- Status symbols
+        local status = ''
+        if vim.bo.readonly then
+          status = '%#StatusLineRO#%*'
+        elseif vim.bo.modified then
+          status = '%#StatusLineModified#●%*'
+        else
+          status = '%#StatusLineSaved#●%*'
+        end
+
+        return string.format('%s -> %s %s', project, relative, status)
       end
 
       -- ... and there is more!
@@ -1065,23 +1093,23 @@ require('lazy').setup({
       }
     end,
   },
-  { -- Tabline
-    'romgrk/barbar.nvim',
-    dependencies = {
-      'lewis6991/gitsigns.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
-    init = function()
-      vim.g.barbar_auto_setup = false
-    end,
-    config = function()
-      require('barbar').setup {
-        animation = false,
-        auto_hide = 0,
-      }
-    end,
-    version = '^1.0.0',
-  },
+  -- { -- Tabline
+  --   'romgrk/barbar.nvim',
+  --   dependencies = {
+  --     'lewis6991/gitsigns.nvim',
+  --     'nvim-tree/nvim-web-devicons',
+  --   },
+  --   init = function()
+  --     vim.g.barbar_auto_setup = false
+  --   end,
+  --   config = function()
+  --     require('barbar').setup {
+  --       animation = false,
+  --       auto_hide = 0,
+  --     }
+  --   end,
+  --   version = '^1.0.0',
+  -- },
   -- Git
   {
     'lewis6991/gitsigns.nvim',
