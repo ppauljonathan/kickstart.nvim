@@ -966,14 +966,14 @@ require('lazy').setup({
   },
   {
     'catppuccin/nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd 'colorscheme catppuccin'
-    end,
   },
   {
     'EdenEast/nightfox.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd 'colorscheme terafox'
+    end,
   },
 
   -- Highlight todo, notes, etc in comments
@@ -1012,11 +1012,6 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
-      -- Define highlight groups (once in your config/init)
-      vim.api.nvim_set_hl(0, 'StatusLineSaved', { fg = '#00ff00' }) -- green
-      vim.api.nvim_set_hl(0, 'StatusLineModified', { fg = '#ffff00' }) -- yellow
-      vim.api.nvim_set_hl(0, 'StatusLineRO', { fg = '#ff0000' }) -- red
-
       -- Override the section_filename to show only the project directory
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
@@ -1034,11 +1029,11 @@ require('lazy').setup({
         -- Status symbols
         local status = ''
         if vim.bo.readonly then
-          status = '%#StatusLineRO#%*'
+          status = ''
         elseif vim.bo.modified then
-          status = '%#StatusLineModified#●%*'
+          status = '󰏫'
         else
-          status = '%#StatusLineSaved#●%*'
+          status = ''
         end
 
         return string.format('%s -> %s %s', project, relative, status)
