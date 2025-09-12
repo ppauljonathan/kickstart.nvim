@@ -227,7 +227,7 @@ vim.keymap.set('n', '<leader>bs', ':w<CR>', { noremap = true, silent = true }) -
 vim.keymap.set('n', '<leader>bk', ':bd<CR>', { noremap = true, silent = true }) -- Close buffer
 
 -- Tabs
-vim.keymap.set('n', '<leader><Tab>', ':bnext<CR>', { noremap = true, silent = true })
+-- vim.keymap.set('n', '<leader><Tab>', ':bnext<CR>', { noremap = true, silent = true })
 
 -- Splits
 vim.keymap.set('n', '<leader>ws', ':split<CR>', { desc = 'Horizontal Split' })
@@ -501,6 +501,9 @@ require('lazy').setup({
             no_ignore = true,
             no_ignore_parent = true,
           },
+          colorscheme = {
+            enable_preview = true,
+          },
         },
         extensions = {
           ['ui-select'] = {
@@ -525,6 +528,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>ht', builtin.colorscheme, { desc = '[H]ighlight [T]heme (colorscheme)' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -751,7 +755,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {
-          cmd = { "clangd", "--compile-commands-dir=." }
+          cmd = { 'clangd', '--compile-commands-dir=.' },
         },
         -- gopls = {},
         pyright = {},
@@ -953,7 +957,7 @@ require('lazy').setup({
     'projekt0n/github-nvim-theme',
   }, --  github
   {
-    'ellisonleao/gruvbox.nvim'
+    'ellisonleao/gruvbox.nvim',
   },
   {
     'shaunsingh/nord.nvim',
@@ -966,7 +970,7 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd('colorscheme catppuccin-mocha')
+      vim.cmd 'colorscheme catppuccin-mocha'
     end,
   },
 
@@ -1009,8 +1013,28 @@ require('lazy').setup({
       -- Override the section_filename to show only the project directory
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
-        local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-        return cwd
+        -- Project root
+        local root = vim.fn.getcwd()
+        local project = vim.fn.fnamemodify(root, ':t')
+
+        -- File path relative to root
+        local filepath = vim.fn.expand '%:p'
+        local relative = vim.fn.fnamemodify(filepath, ':.' .. root)
+        if relative == '' then
+          relative = '[No Name]'
+        end
+
+        -- Status symbols
+        local status = ''
+        if vim.bo.readonly then
+          status = ''
+        elseif vim.bo.modified then
+          status = '󰏫'
+        else
+          status = ''
+        end
+
+        return string.format('%s -> %s %s', project, relative, status)
       end
 
       -- ... and there is more!
@@ -1066,23 +1090,23 @@ require('lazy').setup({
       }
     end,
   },
-  { -- Tabline
-    'romgrk/barbar.nvim',
-    dependencies = {
-      'lewis6991/gitsigns.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
-    init = function()
-      vim.g.barbar_auto_setup = false
-    end,
-    config = function()
-      require('barbar').setup {
-        animation = false,
-        auto_hide = 0,
-      }
-    end,
-    version = '^1.0.0',
-  },
+  -- { -- Tabline
+  --   'romgrk/barbar.nvim',
+  --   dependencies = {
+  --     'lewis6991/gitsigns.nvim',
+  --     'nvim-tree/nvim-web-devicons',
+  --   },
+  --   init = function()
+  --     vim.g.barbar_auto_setup = false
+  --   end,
+  --   config = function()
+  --     require('barbar').setup {
+  --       animation = false,
+  --       auto_hide = 0,
+  --     }
+  --   end,
+  --   version = '^1.0.0',
+  -- },
   -- Git
   {
     'lewis6991/gitsigns.nvim',
