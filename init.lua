@@ -956,7 +956,12 @@ require('lazy').setup({
     'projekt0n/github-nvim-theme',
   }, --  github
   {
-    'neanias/everforest-nvim',
+    'sainnhe/everforest',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd 'colorscheme everforest'
+    end,
   },
   {
     'ellisonleao/gruvbox.nvim',
@@ -968,12 +973,10 @@ require('lazy').setup({
     'catppuccin/nvim',
   },
   {
+    'ribru17/bamboo.nvim',
+  },
+  {
     'EdenEast/nightfox.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd 'colorscheme terafox'
-    end,
   },
 
   -- Highlight todo, notes, etc in comments
